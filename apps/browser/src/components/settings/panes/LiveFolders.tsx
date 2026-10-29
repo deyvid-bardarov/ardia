@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { useShallow } from "zustand/react/shallow";
 import { useTheme } from "../../ui/theme";
 import { deleteLiveFolder, manualRefresh, statusText } from "../../../state/live/engine";
-import { connectGoogleDrive, OAUTH_REDIRECT, signInGitea } from "../../../state/live/oauth";
+import { cancelSignIn, connectGoogleDrive, OAUTH_REDIRECT, signInGitea } from "../../../state/live/oauth";
 import { isMocked, siteUrl } from "../../../state/live/net";
 import { connectBitbucket, connectConfluence, connectGitea, connectGithub, connectNotion, disconnect, SOURCES, startGithubDeviceFlow, type DeviceFlow } from "../../../state/live/sources";
 import { live, updateConfig, updateFolder, useLive } from "../../../state/live/store";
@@ -113,6 +113,7 @@ function ConnectSheet({ id }: { id: LiveSourceId }) {
   const source = SOURCES[id];
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  useEffect(() => cancelSignIn, []);
   const run = async (task: () => Promise<void>) => {
     setBusy(true);
     setError(null);
